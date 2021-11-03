@@ -1,0 +1,138 @@
+<!doctype html>
+<html ng-app="angCustApp">
+    <head>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+		<script src="ngCustomers.js"></script>
+		<meta charset="UTF-8">
+    </head>
+    <body class='ui container'>
+        <h1>Customers List</h1>
+		<div class="ui secondary  menu">
+			<a class="item"href="/locations">Locations</a>
+			<a class="active item" href="/customers">Customers</a>
+			<a class="item" href="/parcels">Parcels</a>
+			<div class="right menu">
+			  <div class="item">
+				<div class="ui icon input">
+				  <input type="text" placeholder="Search for a customer...">
+				  <i class="search link icon"></i>
+				</div>
+			   </div>
+			</div>
+		</div>
+
+        <div ng-controller="CustomersListController">
+			<table class='ui table'>
+				<thead>
+				<tr>
+					<th>Customer Id</th>
+					<th>Customer Name</th>
+					<th>Customer Location</th>
+					<th>Action</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="customer in customers">
+					<td>{{ customer.custId }}</td>
+					<td>{{ customer.custName }}</td>
+					<td>{{ customer.locAddress }}</td>
+					<td>
+						<input class='ui button' type="button" ng-click="showUpdateFormCustomer(customer)" value="Update">
+						<input class='ui button' type="button" ng-click="showConfirmDeleteCustomer(customer)" value="Delete">
+						<input class='ui button' type="button" ng-click="showListCustomerParcel(customer)" value="View Parcels"> 
+					</td>
+				</tr>
+			</tbody>
+			</table>
+
+			<div class='ui container' ng-if="viewTableCustParcel">
+				<h2 ng-if="slectedCustomer">List parcels of {{ slectedCustomer.custName }}</h2>
+				<table class='ui table'>
+					<thead>
+					<tr>
+						<th>Parcel Id</th>
+						<th>Weight</th>
+						<th>Destination</th>
+						<th>Operation</th>
+						<th>Action</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="parcel in parcels">
+						<td>{{ parcel.parcelId }}</td>
+						<td>{{ parcel.weight }}</td>
+						<td>{{ parcel.finalLocation }}</td>
+						<td>{{ parcel.operation }}</td>
+						<td>
+							<input ng-if="parcel.operation !== 'Delivered'" class='ui button' type="button" ng-click="nextStatusParcel(parcel)" value="Next Step">
+							<input ng-if="parcel.operation !== 'Delivered'" class='ui button' type="button" ng-click="rollBackStatusParcel(parcel)" value="Rollback">
+							<input class='ui button' type="button" ng-click="viewParcelHistory(parcel)" value="View History"> 
+						</td>
+					</tr>
+				</tbody>
+				</table>		
+			</div>
+
+			<div class='ui container' ng-if="viewFormAddStatus">
+				<h2>Add parcel status</h2>
+				<form class="ui form" ng-submit="addParcelStatus()">
+					<div class="fields">
+						<div class="field">
+							<label>Parcel Id<input readonly type="text" size="30" ng-model="newParcelStatus.parcelId"/> </label>
+						</div>
+						<div class="field">
+							<label>Location<select ng-model="newParcelStatus.locId">
+								<option ng-repeat="location in locations" value="{{location.locId}}">{{location.locAddress}}</option>
+							</select></label>
+						</div> 
+						<div class="field">
+							<label>Date<input type="date" size="20" ng-model="newParcelStatus.date"/> </label>
+						</div>
+						<div class="field">
+							<label>Time<input type="time" size="20" ng-model="newParcelStatus.time"/> </label>
+						</div>
+						<div class="field">
+							<label>Operation<input type="text" size="20" ng-model="newParcelStatus.operation"/> </label>
+						</div>
+					</div>
+					<input class='ui button' type="submit"  value="Add" />
+					<input class='ui button' type="reset" value="Cancel" ng-click="cancelUpdate()"/>
+				</form>		
+			</div>
+		
+			<h2>Add New Customer</h2>
+			<form name='addCustForm' class="ui form" ng-class="formState" ng-submit="newCustomer()">
+				<div class="fields">
+					<div class="field">
+						<label>Customer Name <input type="text" size="30" ng-model="newCustName"/> </label>
+					</div>
+					<div class="field">
+						<label>Customer Location<select ng-model="selectedLocation">
+							<option ng-repeat="location in locations" value="{{location.locId}}">{{location.locAddress}}</option>
+						</select></label>
+					</div>  
+				</div>
+				<input class='ui button' type="submit"  value="Add" />
+			</form>
+			
+			<div class='ui container' ng-if="viewFormUpdateCust">
+				<h2>Update</h2>
+				<form class="ui form" ng-submit="updateCustomer()">
+					<div class="fields">
+						<div class="field">
+							<label>Customer Name <input type="text" size="30" ng-model="updCustomer.custName"/> </label>
+						</div>
+						<div class="field">
+							<label>Customer Location <input type="text" size="20" ng-model="updCustomer.custLocation"/> </label>
+						</div>
+					</div>
+					<input class='ui button' type="submit"  value="Update" />
+					<input class='ui button' type="reset" value="Cancel" ng-click="cancelUpdate()"/>
+				</form>		
+			</div>
+    	</div>
+    </body>
+</html>
+

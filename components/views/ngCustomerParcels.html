@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="angCustApp">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="ngCustomers.js"></script>
+    <meta charset="UTF-8">
+    <title>Customer's Parcels</title>
+</head>
+
+<body class='ui container'>
+    <a class="item" href="/customers">&lt;&lt; Back to Customers page</a>
+    <div class="container" ng-controller="CustomersListController">
+        <h6>Parcels of <%=customer_parcels[0].custName%></h6>
+        <table class='ui table'>
+            <thead>
+                <tr>
+                    <th scope="col">#Parcel Id</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">City</th>
+                </tr>
+            </thead>
+
+            <% parcels.forEach(parcel=>{%>
+                <tr scope="row">
+                    <td><%=parcel.parcelId%></td>
+                    <td><%=parcel.weight%></td>
+                    <td><%=parcel.locAddress%></td>
+                    <td><%=parcel.city%></td>
+                </tr>
+                <%});%>
+        </table>
+    </div>
+
+</body>
+
+</html>

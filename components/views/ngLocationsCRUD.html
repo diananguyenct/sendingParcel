@@ -1,0 +1,75 @@
+<!doctype html>
+<html ng-app="angLocApp">
+    <head>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+		<script src="ngLocationsCRUD.js"></script>
+		<meta charset="UTF-8">
+    </head>
+    <body class='ui container'>
+        <h1>Locations List</h1>
+		<div class="ui secondary  menu">
+			<a class="active item"href="/locations">Locations</a>
+			<a class="item" href="/customers">Customers</a>
+			<a class="item" href="/parcels">Parcels</a>
+			<div class="right menu">
+			  <div class="item">
+				<div class="ui icon input">
+				  <input type="text" placeholder="Search a location...">
+				  <i class="search link icon"></i>
+				</div>
+			   </div>
+			</div>
+		</div>
+        <div ng-controller="LocationsListController">	
+		<table class='ui table'>
+			<thead>
+			<tr>
+				<th>Id</th>
+				<th>Address</th>
+				<th>City</th>
+				<th>Action</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="location in locations | orderBy: sortCrit">
+				<td>{{ location.locId }}</td>
+				<td>{{ location.locAddress }}</td>
+				<td>{{ location.city }}</td>
+				<td>
+					<input class='ui button' type="button" ng-click="showUpdateFormLocation(location)" value="Update">
+				    <input class='ui button' type="button" ng-click="showConfirmDeleteLocation(location)" value="Delete"> 
+				</td>
+			</tr>
+		</tbody>
+		</table>
+		
+		<h2>Add New Location</h2>
+          <form name='addForm' class="ui form" ng-class="formState" ng-submit="newLocation()">
+			<div class="fields">
+				<div class="field">
+					<label>Address <input type="text" size="30" ng-model="newAddress"/> </label>
+				</div>
+				<div class="field">
+					<label>City <input type="text" size="15" ng-model="newCity"/> </label>
+				  </div>
+			</div>
+		  	<input type="submit"  value="Add" />
+		  </form>
+		
+			<div style = "padding: 20px 20px;" ng-if="viewFormUpdate">
+				<h2>Update</h2>
+				<form ng-submit="updateLocation()">
+					<label>Address <input type="text" size="30" ng-model="updLocation.locAddress"/> </label>
+					<label>City <input type="text" size="15" ng-model="updLocation.locCity"/> </label>
+					
+					<input type="submit"  value="Update" />
+					<input type="reset" value="Cancel" ng-click="cancelUpdate()"/>
+				</form>		
+			</div> 
+    	</div>
+
+    </body>
+</html>
+

@@ -1,0 +1,85 @@
+<!doctype html>
+<html ng-app="angParcelApp">
+    <head>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+		<script src="ngParcels.js"></script>
+		<meta charset="UTF-8">
+    </head class='ui container'>
+    <body class='ui container'>
+        <h1>Parcels List</h1>
+		<div class="ui secondary  menu">
+			<a class="item"href="/locations">Locations</a>
+			<a class="item" href="/customers">Customers</a>
+			<a class="active item" href="/parcels">Parcels</a>
+			<div class="right menu">
+			  <div class="item">
+				<div class="ui icon input">
+				  <input type="text" placeholder="Search a parcel...">
+				  <i class="search link icon"></i>
+				</div>
+			   </div>
+			</div>
+		</div>
+
+        <div ng-controller="ParcelListController">
+			<table class='ui table'>
+				<thead>
+				<tr>
+                    <th>Customer Name</th>
+					<th>Parcel Id</th>
+					<th>Weight</th>
+                    <th>Destination</th>
+					<th>Action</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="parcel in parcels | orderBy: sortCrit">
+                    <td>{{ parcel.custName }}</td>
+					<td>{{ parcel.parcelId }}</td>
+					<td>{{ parcel.weight }}</td>
+                    <td>{{ parcel.finalLocation }}</td>
+					<td>
+						<input class='ui button' type="button" ng-click="showUpdateFormParcel(parcel)" value="Update">
+						<input class='ui button' type="button" ng-click="showConfirmDeleteParcel(parcel)" value="Delete">
+					</td>
+				</tr>
+			</tbody>
+			</table>
+		
+			<h2>Add New Parcel</h2>
+			<form name='addParcelForm' class="ui form" ng-class="formState" ng-submit="newParcel()">
+				<div class="fields">
+					<div class="field">
+						<label>Weight<input type="text" size="30" ng-model="newWeight"/> </label>
+					</div>
+                    <div class="field">
+						<label>Customer Name<select ng-model="selectedCustomer">
+							<option ng-repeat="customer in customers" value="{{customer.custId}}">{{customer.custName}}</option>
+						</select></label>
+					</div>
+					<div class="field">
+						<label>Destination<select ng-model="selectedLocation">
+							<option ng-repeat="location in locations" value="{{location.locId}}">{{location.locAddress}}</option>
+						</select></label>
+					</div>  
+				</div>
+				<input class='ui button' type="submit"  value="Add" />
+			</form>
+			
+			<div ng-if="viewFormUpdateParcel">
+				<h2>Update Parcel</h2>
+				<form class="ui form" ng-submit="updateParcel()">
+					<label>Weight <input type="text" size="30" ng-model="updParcel.weight"/> </label>
+					<label>Customer Name<input type="text" size="100" ng-model="updParcel.custName"/> </label>
+					<label>Destination<input type="text" size="100" ng-model="updParcel.finalDestination"/> </label>
+					<input class='ui button' type="submit"  value="Update" />
+					<input class='ui button' type="reset" value="Cancel" ng-click="cancelUpdate()"/>
+				</form>		
+			</div> 
+    	</div>
+
+    </body>
+</html>
+
